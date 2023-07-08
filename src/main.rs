@@ -1,4 +1,5 @@
 use clap::Parser;
+use cli_clipboard::{ClipboardContext, ClipboardProvider};
 use rand::{thread_rng, Rng};
 use std::env::{var, VarError};
 use std::io::prelude::*;
@@ -40,6 +41,10 @@ struct Cli {
     /// Depending on commands, shows human readable input
     #[arg(long)]
     verbose: bool,
+
+    /// Whether to save it to clipboard or not
+    #[arg(short, long)]
+    clip: bool,
 }
 
 const BASE_DIR_PATH: &str = "~/.nid";
@@ -105,6 +110,19 @@ fn main() -> std::io::Result<()> {
         println!("New id : {}", random);
     } else {
         println!("{}", random);
+    }
+
+    if args.clip {
+        let clipboard_ctx = ClipboardContext::new();
+
+        if let Ok(mut ctx) = clipboard_ctx {
+            match ctx.set_contents(String::from(random)) {
+                Ok(()) => println!("Saved to clipboard!"),
+                Err(_) => println!("Error: could not save to clipboard"),
+            }
+        } else {
+            println!("Error: could not save to clipboard");
+        }
     }
 
     if config.failed {

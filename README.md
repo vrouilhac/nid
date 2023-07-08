@@ -12,17 +12,19 @@ It also has the ability to generate on the fly without saving the id.
 ## Commands
 
 ```
-nid --help
+nid --help                  // show help
 
-nid
+nid                         // basic generation
 
-nid --save
+nid --save                  // save generation to avoid duplicate
 
-nid --save --verbose
+nid --save --verbose        // shows human friendly text
 
-nid --list
+nid --list                  // list all saved id
 
 nid --list --verbose
+
+nid --clip                  // Generate and save to clipboard
 ```
 
 The id generated are `AAABB` with A = `[a-zA-Z]` and B = `[0-9]`
