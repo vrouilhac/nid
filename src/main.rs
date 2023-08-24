@@ -2,7 +2,7 @@ use clap::Parser;
 use cli_clipboard::{ClipboardContext, ClipboardProvider};
 use rand::{thread_rng, Rng};
 use std::env::{var, VarError};
-use std::io::prelude::*;
+use std::io::{self, Write};
 use std::ops::Range;
 use std::{fs, fs::File, path::Path};
 
@@ -68,6 +68,7 @@ fn main() -> std::io::Result<()> {
     if args.list {
         let saved_ids = read_saved_ids(&config);
         print_saved_ids(saved_ids, args.verbose);
+        // io::stdout().flush().expect("Error flushing");
         return Ok(());
     }
 
@@ -141,7 +142,9 @@ fn print_saved_ids(saved_ids: Vec<String>, verbose: bool) {
         if verbose {
             println!("\t- {}", i);
         } else {
-            println!("{}", i);
+            io::stdout()
+                .write_all(format!("{}\n", i).as_bytes())
+                .expect("Error there");
         }
     }
 }
